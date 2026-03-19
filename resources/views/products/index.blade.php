@@ -9,20 +9,22 @@
 <body>
     <h1>Daftar Product</h1>
 
-    @if ($products->count() > 0)
-        <ul>
-            @foreach ($products as $product)
-                <li>
-                    <strong>{{ $product->name }}</strong><br>
-                    Harga: Rp {{ number_format($product->price, 0, ',', '.') }}
-                </li>
-                <hr>
-            @endforeach
-        </ul>
+    <a href="{{ route('products.create') }}">Tambah Produk</a>
 
-         {{ $products->links() }}
-    @else
-        <p>Produk tidak tersedia.</p>
-    @endif
+@foreach($products as $p)
+    <div>
+        <h3>{{ $p->name }}</h3>
+        <p>{{ $p->description }}</p>
+        <p>Rp {{ $p->price }}</p>
+
+        <a href="{{ route('products.edit', $p->id) }}">Edit</a>
+
+        <form action="{{ route('products.destroy', $p->id) }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <button type="submit">Hapus</button>
+        </form>
+    </div>
+@endforeach
 </body>
 </html>

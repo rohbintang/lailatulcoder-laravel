@@ -15,6 +15,10 @@ return new class extends Migration
         $table->id();
         $table->string('name');
         $table->integer('price');
+        $table->text('Description');
+        $table->integer('stock');
+        $table->unsignedBigInteger('category_id');
+        $table->foreignId('seller_id');
         $table->timestamps();
     });
 }
