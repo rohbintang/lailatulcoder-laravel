@@ -2,10 +2,15 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    $categories = Category::all();
+    $products = Product::latest()->paginate(10);
+
+    return view('home', compact('categories', 'products'));
 });
 
 Route::get('/dashboard', function () {
