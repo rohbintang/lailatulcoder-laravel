@@ -1,6 +1,31 @@
 {{-- resources/views/products/show.blade.php --}}
 <x-layouts.app :title="$product->name">
 
+    {{-- Push Css --}}
+    @push('styles')
+        <style>
+            .product-gallery {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+            }
+        </style>
+    @endpush
+
+    {{-- Konten Halaman --}}
+    <div class="product-gallery">
+        {{-- Foto Produk --}}
+    </div>
+
+    {{-- Push  JS --}}
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                //Logic gallery produk
+            });
+        </script>
+    @endpush
+
     {{-- Breadcrumb --}}
     <nav class="flex items-center gap-2 text-sm text-gray-500 mb-6">
         <a href="{{ route('home') }}" class="hover:text-gray-700">Home</a>
