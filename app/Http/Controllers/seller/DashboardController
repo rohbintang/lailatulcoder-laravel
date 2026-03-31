@@ -1,0 +1,47 @@
+<?php
+
+use App\Http\Controllers\Controller;
+use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+
+class DashboardController extends Controller
+{
+    public function index(): View
+    {
+        $seller = Auth::user();
+
+        // Ambil semua data produk dengan relasi yang dibutuhkan
+        $products = $seller->products()
+            ->with('category')
+            ->withCount('orderItems')
+            ->withSum('orderItems', 'subtotal')
+            ->get();
+
+        // Statistik — semua di Collection, tidak ada query tambahan
+        $stats = [
+            'total_products'  => $products->count(),
+            'active_products' => $products->where('is_active', true)->count(),
+            'out_of_stock'    => $products->where('stock', 0)->count(),
+            'total_revenue'   => $products->sum('order_items_sum_subtotal'),
+            'total_orders'    => $products->sum('order_items_count'),
+        ];
+
+        // Top 5 produk terlaris
+        $topProducts = $products
+            ->sortByDesc('order_items_sum_subtotal')
+            ->take(5)
+            ->values();
+
+        // Order terbaru seller ini
+        $recentOrders = Order::whereHas('items.product', fn($q) =>
+            $q->where('seller_id', $seller->id)
+        )
+        ->with(['user', 'items.product'])
+        ->latest()
+        ->limit(10)
+        ->get();
+
+        return view('seller.dashboard', compact('stats', 'topProducts', 'recentOrders'));
+    }
+}

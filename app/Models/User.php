@@ -2,9 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Product;
+use App\Models\Order;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -45,5 +50,34 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    //Seseorang punya banyak produk
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'seller_id');
+    }
+
+    //Seseorang punya banyak orderan
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function CartProducts(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'cart_items')
+                    ->withPivot('quantity')
+                    ->withTimestamps();
+    }
+
+    public function orderitems(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            OrderItem::class,
+            Order::class,
+            'seller_id',
+            'product_id'
+        );
     }
 }

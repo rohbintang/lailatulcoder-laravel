@@ -16,6 +16,7 @@
         "nesbot/carbon": "*"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^4.2",
         "fakerphp/faker": "^1.23",
         "laravel/boost": "2.0",
         "laravel/breeze": "^2.4",

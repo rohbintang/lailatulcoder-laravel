@@ -31,6 +31,10 @@ Route::middleware('role:admin')->group(function () {
 Route::middleware('role:admin,seller')->group(function () {
 });
 
+Route::get('/test-product/{id}', function ($id) {
+    return App\Models\Product::findOrFail($id);
+});
+
 Route::get('/admin', function() {
     return "halaman admin";
 })->middleware('role:admin');

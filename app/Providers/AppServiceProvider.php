@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Product;
+use App\Observers\ProductObserver;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
@@ -25,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->registerBladeDirectives();
         $this->registerBladeConditionals();
+
+        Product::observe(ProductObserver::class);
     }
 
     private function registerBladeDirectives(): void 
@@ -60,4 +64,5 @@ class AppServiceProvider extends ServiceProvider
             : auth::user()->subscribedToPrice($plan);
         });
     }
+    
 }
